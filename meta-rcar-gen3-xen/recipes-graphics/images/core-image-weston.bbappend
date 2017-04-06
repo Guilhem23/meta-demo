@@ -1,5 +1,3 @@
-inherit populate_sdk_qt5
-
 #Add Xen to build
 IMAGE_INSTALL_append = " \
     xen-base \
