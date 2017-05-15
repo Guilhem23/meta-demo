@@ -9,15 +9,14 @@ PACKAGECONFIG ?= " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)} \
     ${@bb.utils.contains('XEN_TARGET_ARCH', 'x86_64', 'hvm', '', d)} \
     "
-
-XEN_REL="4.8"
+XEN_REL="4.9"
 
 SRC_URI = " \
-    git://github.com/xen-troops/xen.git;protocol=http;branch=gen3-test \
+    git://xenbits.xen.org/xen.git;branch=master \
     "
-SRCREV = "${AUTOREV}"
+SRCREV = "4.9.0-rc4"
 
-FLASK_POLICY_FILE="xenpolicy-4.8.0"
+FLASK_POLICY_FILE="xenpolicy-4.9-rc"
 
 EXTRA_OEMAKE += " CONFIG_HAS_SCIF=y CONFIG_QEMU_XEN=n"
 
@@ -59,6 +58,19 @@ SYSTEMD_SERVICE_${PN}-xencommons += " \
 SYSTEMD_SERVICE_${PN}-xencommons_remove += " \
     xenstored.socket \
     xenstored_ro.socket \
+    "
+
+FILES_${PN}-libxendevicemodel = "${libdir}/libxendevicemodel.so.*"
+FILES_${PN}-libxendevicemodel-dev = "${libdir}/libxendevicemodel.so"
+
+FILES_${PN}-pkgconfig = "\
+    ${datadir}/pkgconfig \
+    "
+
+PACKAGES_append = "\
+    ${PN}-libxendevicemodel \
+    ${PN}-libxendevicemodel-dev \
+    ${PN}-pkgconfig \
     "
 
 RDEPENDS_${PN}-efi = " \
